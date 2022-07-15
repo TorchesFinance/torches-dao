@@ -1,8 +1,8 @@
-# @version 0.2.4
+# @version 0.2.12
 
 """
 @title Gauge Controller
-@author Curve Finance
+@author Torches Finance
 @license MIT
 @notice Controls liquidity gauges and the issuance of coins through the gauges
 """
@@ -28,6 +28,9 @@ interface VotingEscrow:
     def get_last_user_slope(addr: address) -> int128: view
     def locked__end(addr: address) -> uint256: view
 
+interface LiquidityGauge:
+    def lp_token() -> address: view
+    def notifySavingChange(addr: address): nonpayable
 
 event CommitOwnership:
     admin: address
@@ -84,6 +87,8 @@ gauges: public(address[1000000000])
 # of zero as meaning the gauge has not been set
 gauge_types_: HashMap[address, int128]
 
+gauges_lptoken: public(HashMap[address, address])
+
 vote_user_slopes: public(HashMap[address, HashMap[address, VotedSlope]])  # user -> gauge_addr -> VotedSlope
 vote_user_power: public(HashMap[address, uint256])  # Total vote power used by user
 last_user_vote: public(HashMap[address, HashMap[address, uint256]])  # Last user vote's timestamp for each gauge address
@@ -113,7 +118,7 @@ time_type_weight: public(uint256[1000000000])  # type_id -> last scheduled time 
 def __init__(_token: address, _voting_escrow: address):
     """
     @notice Contract constructor
-    @param _token `ERC20CRV` contract address
+    @param _token dao contract address
     @param _voting_escrow `VotingEscrow` contract address
     """
     assert _token != ZERO_ADDRESS
@@ -301,6 +306,10 @@ def add_gauge(addr: address, gauge_type: int128, weight: uint256 = 0):
     n: int128 = self.n_gauges
     self.n_gauges = n + 1
     self.gauges[n] = addr
+
+    lptoken: address = LiquidityGauge(addr).lp_token()
+    if lptoken != ZERO_ADDRESS:
+        self.gauges_lptoken[lptoken] = addr
 
     self.gauge_types_[addr] = gauge_type + 1
     next_time: uint256 = (block.timestamp + WEEK) / WEEK * WEEK
@@ -594,3 +603,16 @@ def get_weights_sum_per_type(type_id: int128) -> uint256:
     @return Sum of gauge weights
     """
     return self.points_sum[type_id][self.time_sum[type_id]].bias
+
+@external
+def notifySavingChange(user: address):
+    """
+    @notice Notify gauge the user saving balance changed
+    @param user The user account
+    """
+    assert user != ZERO_ADDRESS # dev: invalid parameter
+
+    gauge: address = self.gauges_lptoken[msg.sender]
+    assert gauge != ZERO_ADDRESS, "the gauge is not added"
+
+    LiquidityGauge(gauge).notifySavingChange(user)

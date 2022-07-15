@@ -1,7 +1,7 @@
-# @version 0.2.15
+# @version 0.2.12
 """
 @title Token Treasury
-@author Hundred Finance
+@author Torches Finance
 @license MIT
 """
 

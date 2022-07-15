@@ -1,7 +1,7 @@
-# @version 0.2.15
+# @version 0.2.12
 """
-@title HND DAO Token proxy
-@author Hundred Finanace
+@title Torches DAO Token proxy
+@author Torches Finance
 @license MIT
 @notice configurable ERC20 with piecewise-linear mining supply.
 @dev Based on the ERC-20 token standard as defined at
