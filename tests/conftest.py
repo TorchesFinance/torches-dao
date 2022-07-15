@@ -168,3 +168,16 @@ def mock_lp_token_B(MockCErc20, coin_b, accounts):  # Not using the actual Curve
 @pytest.fixture(scope="module")
 def mock_lp_token_C(MockCErc20, coin_c, accounts):  # Not using the actual Curve contract
     yield MockCErc20.deploy("Torches C C token", "cWBTC", 18, coin_c, {"from": accounts[0]})
+
+@pytest.fixture(scope="module")
+def gauge_for_mock_v2(LiquidityGaugeV3, alice, mock_lp_token_v2, minter, reward_policy_maker):
+    gauge_name = mock_lp_token_v2.symbol() + "-gauge"
+    gauge = LiquidityGaugeV3.deploy(gauge_name, mock_lp_token_v2, minter, alice,
+            reward_policy_maker, 0, 0, {"from": alice})
+    yield gauge
+
+@pytest.fixture(scope="module")
+def mock_lp_token_v2(MockCErc20V2, coin_deposit, accounts, gauge_controller):  # Not using the actual Curve contract
+    cerc20v2 = MockCErc20V2.deploy("Torches C deposit token", "cUSD", 18, coin_deposit, {"from": accounts[0]})
+    cerc20v2.setController(gauge_controller)
+    yield cerc20v2
