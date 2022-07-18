@@ -30,7 +30,7 @@ interface VotingEscrow:
 
 interface LiquidityGauge:
     def lp_token() -> address: view
-    def notifySavingChange(addr: address): nonpayable
+    def notifySavingsChange(addr: address): nonpayable
 
 event CommitOwnership:
     admin: address
@@ -605,7 +605,7 @@ def get_weights_sum_per_type(type_id: int128) -> uint256:
     return self.points_sum[type_id][self.time_sum[type_id]].bias
 
 @external
-def notifySavingChange(user: address):
+def notifySavingsChange(user: address):
     """
     @notice Notify gauge the user saving balance changed
     @param user The user account
@@ -615,4 +615,4 @@ def notifySavingChange(user: address):
     gauge: address = self.gauges_lptoken[msg.sender]
     assert gauge != ZERO_ADDRESS, "the gauge is not added"
 
-    LiquidityGauge(gauge).notifySavingChange(user)
+    LiquidityGauge(gauge).notifySavingsChange(user)

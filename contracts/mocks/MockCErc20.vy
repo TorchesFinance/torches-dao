@@ -9,7 +9,7 @@ from vyper.interfaces import ERC20
 implements: ERC20
 
 interface LiquidityGauge:
-    def notifySavingChange(addr: address):  nonpayable
+    def notifySavingsChange(addr: address):  nonpayable
 
 event Transfer:
     _from: indexed(address)
@@ -80,7 +80,7 @@ def deposit(_value: uint256):
         ERC20(self.underlying).transferFrom(msg.sender, self, _value)
         self._mint(msg.sender, _value)
         if self.gauge != ZERO_ADDRESS:
-            LiquidityGauge(self.gauge).notifySavingChange(msg.sender)
+            LiquidityGauge(self.gauge).notifySavingsChange(msg.sender)
 
 @external
 def withdraw(_value: uint256):
@@ -90,7 +90,7 @@ def withdraw(_value: uint256):
     ERC20(self.underlying).transfer(msg.sender, _value)
 
     if self.gauge != ZERO_ADDRESS:
-        LiquidityGauge(self.gauge).notifySavingChange(msg.sender)
+        LiquidityGauge(self.gauge).notifySavingsChange(msg.sender)
 
 @external
 @view
@@ -127,8 +127,8 @@ def transfer(_to : address, _value : uint256) -> bool:
     log Transfer(msg.sender, _to, _value)
 
     if self.gauge != ZERO_ADDRESS:
-        LiquidityGauge(self.gauge).notifySavingChange(msg.sender)
-        LiquidityGauge(self.gauge).notifySavingChange(_to)
+        LiquidityGauge(self.gauge).notifySavingsChange(msg.sender)
+        LiquidityGauge(self.gauge).notifySavingsChange(_to)
 
     return True
 
@@ -151,8 +151,8 @@ def transferFrom(_from : address, _to : address, _value : uint256) -> bool:
     log Transfer(_from, _to, _value)
 
     if self.gauge != ZERO_ADDRESS:
-        LiquidityGauge(self.gauge).notifySavingChange(_from)
-        LiquidityGauge(self.gauge).notifySavingChange(_to)
+        LiquidityGauge(self.gauge).notifySavingsChange(_from)
+        LiquidityGauge(self.gauge).notifySavingsChange(_to)
 
     return True
 

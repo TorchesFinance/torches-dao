@@ -692,7 +692,7 @@ def accept_transfer_ownership():
 
 @external
 @nonreentrant('lock')
-def notifySavingChange(addr: address):
+def notifySavingsChange(addr: address):
     """
     @notice Notify the saving balance of addr changed
     """
