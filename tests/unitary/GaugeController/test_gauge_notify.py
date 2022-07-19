@@ -10,8 +10,7 @@ def initial_setup(coin_deposit, mock_lp_token_v2, accounts):
     coin_deposit.approve(mock_lp_token_v2, LP_AMOUNT, {"from": accounts[0]})
 
 def test_gauge_notify_not_added(gauge_controller, accounts, mock_lp_token_v2):
-    with brownie.reverts("the gauge is not added"):
-        mock_lp_token_v2.deposit(LP_AMOUNT, {"from": accounts[0]})
+    mock_lp_token_v2.deposit(LP_AMOUNT, {"from": accounts[0]})
 
 
 def test_gauge_notify(gauge_controller, accounts, gauge_for_mock_v2, mock_lp_token_v2):

@@ -613,6 +613,5 @@ def notifySavingsChange(user: address):
     assert user != ZERO_ADDRESS # dev: invalid parameter
 
     gauge: address = self.gauges_lptoken[msg.sender]
-    assert gauge != ZERO_ADDRESS, "the gauge is not added"
-
-    LiquidityGauge(gauge).notifySavingsChange(user)
+    if gauge != ZERO_ADDRESS:
+        LiquidityGauge(gauge).notifySavingsChange(user)
