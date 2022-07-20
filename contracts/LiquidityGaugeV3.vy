@@ -151,6 +151,7 @@ def __init__(_name: String[64], _lp_token: address, _minter: address,
     @param _admin Admin who can kill the gauge
     @param _reward_policy_maker Reward policy maker contract address
     """
+    assert _lp_token != ZERO_ADDRESS # dev: lp_token can not be zero address
 
     self.name = _name
 

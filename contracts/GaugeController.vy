@@ -308,8 +308,7 @@ def add_gauge(addr: address, gauge_type: int128, weight: uint256 = 0):
     self.gauges[n] = addr
 
     lptoken: address = LiquidityGauge(addr).lp_token()
-    if lptoken != ZERO_ADDRESS:
-        self.gauges_lptoken[lptoken] = addr
+    self.gauges_lptoken[lptoken] = addr
 
     self.gauge_types_[addr] = gauge_type + 1
     next_time: uint256 = (block.timestamp + WEEK) / WEEK * WEEK
