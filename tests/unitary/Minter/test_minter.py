@@ -13,7 +13,7 @@ WEEK = 7 * 86400
 
 @pytest.fixture(scope="module", autouse=True)
 def minter_setup(accounts, gauge_controller, three_gauges,
-        coin_deposit, coin_a, coin_b, coin_c, mock_lp_token_A, mock_lp_token_B, mock_lp_token_C, chain):
+        coin_a, coin_b, coin_c, mock_lp_token_A, mock_lp_token_B, mock_lp_token_C, chain):
 
     # ensure the tests all begin at the start of the epoch week
     chain.mine(timestamp=(chain.time() / WEEK + 1) * WEEK)

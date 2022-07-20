@@ -181,3 +181,7 @@ def mock_lp_token_v2(MockCErc20V2, coin_deposit, accounts, gauge_controller):  #
     cerc20v2 = MockCErc20V2.deploy("Torches C deposit token", "cUSD", 18, coin_deposit, {"from": accounts[0]})
     cerc20v2.setController(gauge_controller)
     yield cerc20v2
+
+@pytest.fixture(scope="module")
+def reward_helper(RewardHelper, minter, accounts):
+    yield RewardHelper.deploy(minter, {"from": accounts[0]})
