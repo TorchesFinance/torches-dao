@@ -32,6 +32,8 @@ def deploy():
         admin, DAO_TOKEN, voting_escrow, POLICYMAKER_REWARD, GAUGE_TYPES, POOL_TOKENS, config.REQUIRED_CONFIRMATIONS, DEPLOYMENTS_JSON
     )
 
+    dao.deploy_reward_helper(admin, DEPLOYMENTS_JSON, config.REQUIRED_CONFIRMATIONS)
+
 def add_gauge():
     admin = config.get_live_admin()
 
@@ -45,3 +47,8 @@ def add_gauge():
             gauge_json["cToken"], eval(gauge_json["pointRate"]), eval(gauge_json["pointProportion"]),
             gauge_json["rewardToken"], eval(gauge_json["rewardRate"]), gauge_json["weight"],
             config.REQUIRED_CONFIRMATIONS, DEPLOYMENTS_JSON)
+
+def deploy_helper():
+    admin = config.get_live_admin()
+    dao.deploy_reward_helper(admin, DEPLOYMENTS_JSON, config.REQUIRED_CONFIRMATIONS)
+

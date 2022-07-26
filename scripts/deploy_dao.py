@@ -9,6 +9,7 @@ from brownie import (
     Treasury,
     RewardPolicyMaker,
     VotingEscrow,
+    RewardHelper,
     accounts,
     history,
     ZERO_ADDRESS
@@ -129,3 +130,16 @@ def add_gauge(admin, name, minter, policyMaker, lp_token, point_rate, point_prop
         print(f"Deployment addresses saved to {deployments_json}")
 
     return gauge
+
+def deploy_reward_helper(admin, deployments_json, confs=1):
+    with open(deployments_json) as fp:
+        deployments = json.load(fp)
+
+    helper = RewardHelper.deploy(deployments["Minter"], {"from": admin, "required_confs": confs})
+
+    with open(deployments_json, "r+") as fp:
+        deployments = json.load(fp)
+        fp.seek(0)
+        deployments["RewardHelper"] = helper.address
+        json.dump(deployments, fp)
+    print(f"Deployment addresses saved to {deployments_json}")
