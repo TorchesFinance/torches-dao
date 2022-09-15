@@ -9,7 +9,7 @@ from brownie import network
 DEPLOYMENTS_JSON = "scripts/" + network.main.show_active() + "/deployments.json"
 GAUGE_JSON = "scripts/" + network.main.show_active() + "/gauge.json"
 
-DAO_TOKEN = '0x1e33Fe41fF7373c64FAE3a404435a39Cce42eB0f'
+DAO_TOKEN = '0xFF008682bB67F48866dE72A433508c5a6897eE3c'
 POLICYMAKER_REWARD = 10 ** 18
 
 # name, type weight
@@ -44,7 +44,7 @@ def add_gauge():
         deployments = json.load(fp)
 
     dao.add_gauge(admin, gauge_json["name"], deployments["Minter"], deployments["RewardPolicyMaker"],
-            gauge_json["cToken"], eval(gauge_json["pointRate"]), eval(gauge_json["pointProportion"]),
+            gauge_json["tToken"], eval(gauge_json["pointRate"]), eval(gauge_json["pointProportion"]),
             gauge_json["rewardToken"], eval(gauge_json["rewardRate"]), gauge_json["weight"],
             config.REQUIRED_CONFIRMATIONS, DEPLOYMENTS_JSON)
 
